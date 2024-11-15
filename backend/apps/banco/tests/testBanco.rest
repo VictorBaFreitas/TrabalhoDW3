@@ -1,0 +1,68 @@
+### Necessário para pegar o token
+### Post
+# @name loginAutenticado
+POST http://localhost:40000/Login HTTP/1.1
+content-type: application/json
+
+{    
+    "UserName": "usuario",
+    "Password": "usuario"
+}
+### Seta o token
+@accessToken = {{loginAutenticado.response.body.$.token}}
+@username = {{loginAutenticado.response.body.$.username}}
+
+### teste de buscar todos os bancos
+GET  http://localhost:40000/GetAllBanco HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{accessToken}}
+
+{    
+
+}
+
+### teste de buscar banco por id
+POST http://localhost:40000/GetBancoByID HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{accessToken}}
+
+{    
+    "idbanco": 2
+}
+
+### teste de inserção de banco
+POST http://localhost:40000/InsertBanco HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{accessToken}}
+
+{    
+    "idBanco": 2,
+    "nomeBanco": "Banco do Buiu",
+    "codigoBanco": "102",
+    "dataCadastro": "2021-10-10",
+    "taxaServico": 0.90,
+    "removido": false
+}
+
+### teste de atualização de banco
+POST http://localhost:40000/UpdateBanco HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{accessToken}}
+
+{    
+    "idBanco": 2,
+    "nomeBanco": "Banco do Cauã",
+    "codigoBanco": "102",
+    "dataCadastro": "2021-10-11",
+    "taxaServico": 0.60,
+    "removido": false
+}
+
+### teste de remoção de banco
+POST http://localhost:40000/DeleteBanco HTTP/1.1
+content-type: application/json
+Authorization: Bearer {{accessToken}}
+
+{    
+    "idBanco": 2
+}
