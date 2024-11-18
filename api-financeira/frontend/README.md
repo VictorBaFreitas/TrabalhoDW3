@@ -22,7 +22,7 @@ Este é o frontend do projeto API Financeira, desenvolvido na disciplina de Dese
 2. Instale as dependências:
 
     ```
-    nom install
+    npm install
 3. Inicie o servidor:
 
     ```
