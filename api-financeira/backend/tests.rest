@@ -1,0 +1,53 @@
+### Teste para Inserir Usuário
+POST http://localhost:30000/api/auth/register HTTP/1.1
+Content-Type: application/json
+
+{
+  "nome_usuario": "João Silva",
+  "email_usuario": "joaosilva@example.com",
+  "senha_usuario": "senha123"
+}
+
+### Testando login
+
+POST http://localhost:30000/api/auth/login
+Content-Type: application/json
+
+{
+  "email_usuario": "joaosilva@example.com",
+  "senha_usuario": "senha123"
+}
+
+### Testando CRUD de Contas
+
+POST http://localhost:30000/api/contas HTTP/1.1
+x-auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJpYXQiOjE3MzE4OTY4NjIsImV4cCI6MTczMTkwMDQ2Mn0.Zh-poPLngghvgOweyGSUlBGdVt5AN4Le7kXngPoF62g
+Content-Type: application/json
+
+{
+  "titular_conta": "João Silva",
+  "numero_conta": "12345",
+  "saldo_conta": 1000
+}
+
+### Buscar todas as contas
+
+GET http://localhost:30000/api/contas
+x-auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJpYXQiOjE3MzE4OTY4NjIsImV4cCI6MTczMTkwMDQ2Mn0.Zh-poPLngghvgOweyGSUlBGdVt5AN4Le7kXngPoF62g
+
+### Atualizar conta
+
+PUT http://localhost:30000/api/contas/1
+x-auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJpYXQiOjE3MzE4ODk5MzYsImV4cCI6MTczMTg5MzUzNn0.B-TqB9o0Ayg3edyiwQMjyHowK54wlBEuTSUxCk85uZc
+Content-Type: application/json
+
+{
+  "titular_conta": "João Silva",
+  "numero_conta": "12345",
+  "saldo_conta": 1500
+}
+
+### Deletar conta
+
+DELETE http://localhost:30000/api/contas/1
+x-auth-token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c3VhcmlvIjoxLCJpYXQiOjE3MzE4ODk5MzYsImV4cCI6MTczMTg5MzUzNn0.B-TqB9o0Ayg3edyiwQMjyHowK54wlBEuTSUxCk85uZc
