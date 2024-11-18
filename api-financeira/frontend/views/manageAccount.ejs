@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gerenciar Conta</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1 class="text-center my-4">Gerenciar Conta</h1>
+    <form id="account-form">
+      <div class="form-group">
+        <label for="titular_conta">Titular da Conta</label>
+        <input type="text" class="form-control" id="titular_conta" name="titular_conta" required>
+      </div>
+      <div class="form-group">
+        <label for="numero_conta">Número da Conta</label>
+        <input type="text" class="form-control" id="numero_conta" name="numero_conta" required>
+      </div>
+      <div class="form-group">
+        <label for="saldo_conta">Saldo da Conta</label>
+        <input type="number" class="form-control" id="saldo_conta" name="saldo_conta" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Salvar</button>
+    </form>
+  </div>
+  <script>
+    const token = '<%= token %>';
+    const API_URL = 'http://localhost:30000/api';
+    const accountId = '<%= accountId %>';
+
+    document.getElementById('account-form').addEventListener('submit', async function(event) {
+      event.preventDefault();
+      const titular_conta = document.getElementById('titular_conta').value;
+      const numero_conta = document.getElementById('numero_conta').value;
+      const saldo_conta = document.getElementById('saldo_conta').value;
+
+      try {
+        if (accountId) {
+          await axios.put(`${API_URL}/contas/${accountId}`, {
+            titular_conta,
+            numero_conta,
+            saldo_conta
+          }, {
+            headers: { 'x-auth-token': token }
+          });
+        } else {
+          await axios.post(`${API_URL}/contas`, {
+            titular_conta,
+            numero_conta,
+            saldo_conta
+          }, {
+            headers: { 'x-auth-token': token }
+          });
+        }
+        window.location.href = `/dashboard?token=${token}`;
+      } catch (error) {
+        console.error('Erro ao salvar conta:', error);
+      }
+    });
+
+    async function fetchAccountDetails() {
+      if (accountId) {
+        try {
+          const response = await axios.get(`${API_URL}/contas/${accountId}`, {
+            headers: { 'x-auth-token': token }
+          });
+          const account = response.data;
+          document.getElementById('titular_conta').value = account.titular_conta;
+          document.getElementById('numero_conta').value = account.numero_conta;
+          document.getElementById('saldo_conta').value = account.saldo_conta;
+        } catch (error) {
+          console.error('Erro ao buscar detalhes da conta:', error);
+        }
+      }
+    }
+
+    fetchAccountDetails();
+  </script>
+</body>
+</html>

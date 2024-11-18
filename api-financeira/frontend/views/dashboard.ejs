@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="/styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+  <div class="container">
+    <h1 class="text-center my-4">Dashboard</h1>
+    <div class="row mb-4">
+      <div class="col-md-12 text-right">
+        <a href="/manageAccount?token=<%= token %>" class="btn btn-success">Criar Nova Conta</a>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <ul id="accounts-list" class="list-group"></ul>
+      </div>
+    </div>
+  </div>
+  <script>
+    const token = '<%= token %>';
+    const API_URL = 'http://localhost:30000/api';
+
+    async function fetchAccounts() {
+      try {
+        const response = await axios.get(`${API_URL}/contas`, {
+          headers: { 'x-auth-token': token }
+        });
+        const accounts = response.data;
+        const accountsList = document.getElementById('accounts-list');
+        accountsList.innerHTML = '';
+        accounts.forEach(account => {
+          const li = document.createElement('li');
+          li.className = 'list-group-item d-flex justify-content-between align-items-center';
+          li.innerHTML = `
+            <span>Titular: ${account.titular_conta}, Número: ${account.numero_conta}, Saldo: ${account.saldo_conta}</span>
+            <div>
+              <a href="/manageAccount?token=${token}&accountId=${account.id_conta}" class="btn btn-warning btn-sm mr-2">Alterar</a>
+              <button class="btn btn-danger btn-sm" onclick="deleteAccount(${account.id_conta})">Excluir</button>
+            </div>
+          `;
+          accountsList.appendChild(li);
+        });
+      } catch (error) {
+        console.error('Erro ao buscar contas:', error);
+      }
+    }
+
+    async function deleteAccount(id) {
+      try {
+        await axios.delete(`${API_URL}/contas/${id}`, {
+          headers: { 'x-auth-token': token }
+        });
+        fetchAccounts();
+      } catch (error) {
+        console.error('Erro ao excluir conta:', error);
+      }
+    }
+
+    fetchAccounts();
+  </script>
+</body>
+</html>
